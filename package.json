@@ -1,0 +1,26 @@
+{
+  "name": "blog_like_platform",
+  "version": "1.0.0",
+  "description": "a blog like app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chinsiang99/blog_like_platform.git"
+  },
+  "author": "Tan Chin Siang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chinsiang99/blog_like_platform/issues"
+  },
+  "homepage": "https://github.com/chinsiang99/blog_like_platform#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0"
+  }
+}
