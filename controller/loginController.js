@@ -24,9 +24,9 @@ const login = asyncHandler(async (req,res,next)=>{
     console.log(error.message);
     if(error.code == "auth/wrong-password"){
       data.errorMessage = "Wrong password!";
-      res.render('login', data);
+      res.status(401).render('login', data);
     }else if(error.code == 'auth/user-not-found'){
-      res.render('login', data);
+      res.status(404).render('login', data);
     }
   });
 
