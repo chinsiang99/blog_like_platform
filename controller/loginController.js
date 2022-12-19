@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
-// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
+const {getAuth, signInWithEmailAndPassword} = require("firebase/auth");
 
 const getLoginPage = asyncHandler(async (req,res,next)=>{
   res.render("login", {status: 200});
@@ -11,6 +11,25 @@ const login = asyncHandler(async (req,res,next)=>{
   console.log(password, email);
 
   const auth = getAuth();
+
+  signInWithEmailAndPassword(auth, email, password)
+  .then(cred=>{
+    console.log("User logged in: ", cred.user);
+  }).catch(error=>{
+    const data = {
+      status: 401,
+      errorMessage: "User not found!",
+    }
+    
+    console.log(error.message);
+    if(error.code == "auth/wrong-password"){
+      data.errorMessage = "Wrong password!";
+      res.render('login', data);
+    }else if(error.code == 'auth/user-not-found'){
+      res.render('login', data);
+    }
+  });
+
 
 
 
