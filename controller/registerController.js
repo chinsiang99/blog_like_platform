@@ -6,7 +6,7 @@ const asyncHandler = require("express-async-handler");
 const {getAuth, createUserWithEmailAndPassword} = require("firebase/auth");
 
 const getRegisterPage = asyncHandler(async (req,res,next)=>{
-  res.render("signup");
+  res.render("signup", {status: 200});
 });
 
 const register = asyncHandler(async (req,res,next)=>{
@@ -17,9 +17,18 @@ const register = asyncHandler(async (req,res,next)=>{
   createUserWithEmailAndPassword(auth, email, password)
   .then((cred)=>{
     console.log(`User created successfully : ${cred.user}`);
+    res.render("login", {status: 200});
   })
   .catch(error=>{
-    console.log(error.message);
+    // res.render("signup", {status: 200});
+    // console.log(error.code);
+    if(error.code == 'auth/email-already-in-use'){
+      const data = {
+        status: 409,
+        errorMessage: "Account Exists!"
+      }
+      res.render('signup', data);
+    }
   });
 
 
