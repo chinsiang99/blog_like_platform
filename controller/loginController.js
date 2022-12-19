@@ -27,22 +27,11 @@ const login = asyncHandler(async (req,res,next)=>{
       res.status(401).render('login', data);
     }else if(error.code == 'auth/user-not-found'){
       res.status(404).render('login', data);
+    }else if(error.code == 'auth/too-many-requests'){
+      data.errorMessage = "Too many request! Try again later";
+      res.status(429).render('login', data);
     }
   });
-
-
-
-
-  // const authentication = require("firebase/auth");
-  // const firebaseAuth = require('../config/dbConnection');
-  // const auth = authentication.getAuth(firebaseAuth);
-
-  // try{
-  //   const authorization = await authentication.signInWithEmailAndPassword(auth, email, password);
-  // }catch(e){
-  //   res.status(401);
-  //   throw new Error("User not found!");
-  // }
   
 });
 
