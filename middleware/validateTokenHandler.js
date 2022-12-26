@@ -3,11 +3,11 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const validateToken = asyncHandler(async (req, res, next) => {
-    const authHeader = req.headers.authorization;
+    const jwtauth = req.headers.authorization;
 
-    if (authHeader && authHeader.startsWith("Bearer")) {
-        token = authHeader.split(" ")[1];
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECERT, (err, decoded) => {
+    if (authHeader) {
+        // token = authHeader.split(" ")[1];
+        jwt.verify(jwtauth, process.env.ACCESS_TOKEN_SECERT, (err, decoded) => {
             if (err) {
                 res.status(401);
                 throw new Error("User is not authorized");

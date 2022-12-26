@@ -1,5 +1,8 @@
 const { initializeApp } = require('firebase/app');
 
+require("dotenv").config();
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyBdspfH2bpFPkiu4l3sctXo42JfzkrzYKE",
   authDomain: "blog-like-platform.firebaseapp.com",

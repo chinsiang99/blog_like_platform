@@ -2,6 +2,8 @@ const asyncHandler = require("express-async-handler");
 
 const {getAuth, signInWithEmailAndPassword} = require("firebase/auth");
 
+const jwt = require("jsonwebtoken");
+
 const getLoginPage = asyncHandler(async (req,res,next)=>{
   res.render("login", {status: 200});
 });
@@ -16,6 +18,17 @@ const login = asyncHandler(async (req,res,next)=>{
   .then(cred=>{
     console.log("User logged in: ", cred.user);
     console.log(cred.user.uid);
+    const accessToken = jwt.sign(
+      {
+          user: {
+              uid: cred.user.uid,
+          },
+      },
+      process.env.ACCESS_TOKEN_SECERT,
+      { expiresIn: "24h" }
+    );
+    res.cookie('jwt_auth', accessToken);
+    console.log("WOWWW");
     res.status(200).render('main');
   }).catch(error=>{
     const data = {
