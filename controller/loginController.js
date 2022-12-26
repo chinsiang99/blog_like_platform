@@ -15,6 +15,8 @@ const login = asyncHandler(async (req,res,next)=>{
   signInWithEmailAndPassword(auth, email, password)
   .then(cred=>{
     console.log("User logged in: ", cred.user);
+    console.log(cred.user.uid);
+    res.status(200).render('main');
   }).catch(error=>{
     const data = {
       status: 401,
