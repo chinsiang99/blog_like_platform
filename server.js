@@ -5,7 +5,11 @@ const { expressErrorHandler } = require("./middleware/error_handlerMiddleware");
 const router = require('./routes/index');
 // const firebaseAuth = require('./config/dbConnection');
 require('./config/dbConnection');
+const cookieParser = require('cookie-parser');
 const app = express();
+
+// to handle cookies
+app.use(cookieParser());
 
 // to handle json
 app.use(express.json());
