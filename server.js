@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const { expressErrorHandler } = require("./middleware/error_handlerMiddleware");
 const router = require('./routes/index');
 // const firebaseAuth = require('./config/dbConnection');
-require('./config/dbConnection');
+const {db} = require('./config/dbConnection');
 const cookieParser = require('cookie-parser');
 const app = express();
 

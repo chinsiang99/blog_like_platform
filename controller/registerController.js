@@ -3,6 +3,8 @@ const asyncHandler = require("express-async-handler");
 // const asyncHandler = require("express-async-handler");
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
+const { db } = require('../config/dbConnection');
+
 const {getAuth, createUserWithEmailAndPassword} = require("firebase/auth");
 
 const getRegisterPage = asyncHandler(async (req,res,next)=>{
@@ -13,7 +15,7 @@ const register = asyncHandler(async (req,res,next)=>{
   const {email, password} = req.body;
 
   const auth = getAuth();
-  console.log(email, password);
+  // console.log(email, password);
   createUserWithEmailAndPassword(auth, email, password)
   .then((cred)=>{
     console.log(`User created successfully : ${cred.user}`);

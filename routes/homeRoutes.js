@@ -1,6 +1,6 @@
 const { Router } = require("express");
 // const { getLoginPage, login } = require("../controller/loginController");
-const { getMainPage } = require("../controller/mainController");
+const { getHomePage } = require("../controller/homeController");
 const validateToken = require("../middleware/validateTokenHandler");
 // const {createContact, getAllContacts, getSpecificContact, updateContact, deleteContact} = require("../controllers/contactController");
 // const validateUserExists = require("../middleware/validateUserExist");
@@ -16,7 +16,7 @@ const router = Router();
 
 // route to create new contact
 router.route("/").get(
-  validateToken, getMainPage
+  validateToken, getHomePage
 );
 
 module.exports = router;

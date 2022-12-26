@@ -1,4 +1,7 @@
 const { initializeApp } = require('firebase/app');
+const { getFirestore } = require("firebase/firestore");
+
+// require('firebase');
 
 require("dotenv").config();
 
@@ -13,8 +16,15 @@ const firebaseConfig = {
   measurementId: "G-TKBKEL5QCT"
 };
 
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-// module.exports = firebaseAuth;
+const db = getFirestore(app);
+
+// console.log(db);
+// db.settings({timestampsInSnapshots: true});
+
+// const db = firebase.firestore();
+
+module.exports = {db};
 
 // const firebase = firebase.firebaseConfig(firebaseConfig);
