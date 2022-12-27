@@ -6,6 +6,7 @@ const { collection, doc, setDoc, getDocs, query, orderBy, limit, arrayRemove, wh
 const getHomePage = asyncHandler(async (req,res,next)=>{
   console.log("HELLO THERE!");
   // console.log(db);
+  console.log(req.user);
 
   const postCollection = collection(db, "blogpost");
   const docsSnap = await getDocs(postCollection);
@@ -39,7 +40,8 @@ const getHomePage = asyncHandler(async (req,res,next)=>{
     user_email: "",
     next_offset: next_offset,
     prev_offset: prev_offset,
-    total_length: total_length
+    total_length: total_length,
+    current_user: req.user.user
   };  
 
   // console.log(docsSnap);
