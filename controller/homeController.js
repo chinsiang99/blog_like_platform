@@ -1,18 +1,15 @@
 const asyncHandler = require("express-async-handler");
 const { db } = require('../config/dbConnection');
-// const {getDocs, doc} = require('firebase');
-const { collection, doc, setDoc, getDocs, query, orderBy, limit, arrayRemove, where, onSnapshot } = require("firebase/firestore");
+const { collection, getDocs, query, orderBy, where } = require("firebase/firestore");
 
+// get home page - get the blogpost being displayed
 const getHomePage = asyncHandler(async (req,res,next)=>{
-  console.log("HELLO THERE!");
-  // console.log(db);
-  console.log(req.user);
 
+  // get blogpost collection
   const postCollection = collection(db, "blogpost");
-  const docsSnap = await getDocs(postCollection);
+  const postQuery = await query(postCollection, orderBy("timestamp"));
+  const docsSnap = await getDocs(postQuery);
   const { offset } = req.query;
-  // console.log(typeof docsSnap);
-  // console.log(docsSnap.docs.length);
   const total_length = docsSnap.docs.length;
   let offset_value = offset ?? 0;
   let counter = 0;
@@ -38,65 +35,66 @@ const getHomePage = asyncHandler(async (req,res,next)=>{
     title: "",
     description: "",
     user_email: "",
+    curr_offset: offset_value ?? 0,
     next_offset: next_offset,
+    image_url: "",
     prev_offset: prev_offset,
     total_length: total_length,
-    current_user: req.user.user
+    current_user: req.user.user,
+    current_user_id: req.user.uid,
+    comments: 0,
+    likes: false,
+    like_id: 0
   };  
-
-  // console.log(docsSnap);
 
   if(offset_value > total_length){
     throw new Error("There are no further more records to be shown!");
   }
-
+  let comment = "";
   docsSnap.forEach((doc) => {
     if(counter == offset_value){
       data.id = doc.id;
       data.title = doc.data().title;
       data.description = doc.data().description;
       data.user_email = doc.data().user_email;
-      console.log(data);
+      data.image_url = doc.data().image_url;
+      comment = doc.data().comment;
     }
     counter++;
   })
-
-  // const result = await query(postCollection,
-  //   limit(25), offset(1));
-  // console.log(typeof result);
-  // console.log(result.docs.length);
-
-  // onSnapshot(result, (snapshot)=>{
-  //   if(snapshot.docs.length){
-
-  //   }else{
-  //     console.log("gg");
-  //   }
-  //   console.log(snapshot.docs.length);
-  // })
   
-  // result.forEach(doc => {
-  //   console.log(doc.id);
-  //   console.log(doc.data());
-  // })
-  // docsSnap.forEach(doc => {
-  //   console.log(doc.id);
-  //   console.log(doc.data());
-  // })
-  // const blogpost = await db.collection('blogpost').get();
-  // db.collection('users').doc(''+ sender_id).get().then(function(doc) {
-  //   console.log(doc.data().name);
-  // });
-  // console.log(blogpost);
+  // get comments for the blogpost
+  const commentCollection = collection(db, "comment");
+  const commentQuery = await query(commentCollection, where("post_id", "==", data.id), orderBy("timestamp"));
 
-  // const q = query(postCollection, limit(25));
-  
-  
+  var comments = [];
+  const commentSnapshot = await getDocs(commentQuery);
+  const comment_length = commentSnapshot.docs.length;
 
-  // console.log(q.empty);
+  if(comment_length){
+    commentSnapshot.forEach(doc=>{
+      comments.push(doc.data());
+    })
+    data.comments = comments;
+  }
 
+  // get likes for the blogpost
+  const likeCollection = collection(db, "like");
+  const likeQuery = await query(likeCollection, where("post_id", "==", data.id));
+  const likeSnapshot = await getDocs(likeQuery);
+  const like_length = likeSnapshot.docs.length;
+
+  if(like_length){
+    likeSnapshot.forEach(doc=>{
+      if(doc.data().user_uid == req.user.uid){
+        data.like_id = doc.id;
+        data.likes = true;
+      }
+    })
+  }
 
   res.render("home", data);
+
 });
 
 module.exports = { getHomePage }
