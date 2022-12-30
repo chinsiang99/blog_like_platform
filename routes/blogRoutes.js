@@ -1,27 +1,23 @@
 const { Router } = require("express");
 // const { getLoginPage, login } = require("../controller/loginController");
-const { getCreateBlog } = require("../controller/blogController");
-// const validateToken = require("../middleware/validateTokenHandler");
+const { getCreateBlog, createBlogPost } = require("../controller/blogController");
+const validateToken = require("../middleware/validateTokenHandler");
 // const {createContact, getAllContacts, getSpecificContact, updateContact, deleteContact} = require("../controllers/contactController");
 // const validateUserExists = require("../middleware/validateUserExist");
+// const multer = require('multer');
+const multer = require("multer");
+// const upload = multer();
+const multerStoreage = multer.memoryStorage();
+const upload = multer({ storage: multerStoreage }).single("image");
 
 const router = Router();
+router.use(validateToken);
 
-// define routes after the "/contacts/" prefix
-// api/contacts/
-
-// since all the endpoint inside contact route should be private, so every endpoint will have to gone through validate token middleware and validate whether the user exists
-// router.use(validateToken);
-// router.use(validateUserExists);
-
-// route to create new contact
+// route to create new blog post
 router.route("/").get(
   getCreateBlog
 );
 
-// router.route("/").post(
-//   login
-// );
-
+router.post("/", upload, createBlogPost);
 
 module.exports = router;
