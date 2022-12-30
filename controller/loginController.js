@@ -6,20 +6,19 @@ const {getAuth, signInWithEmailAndPassword} = require("firebase/auth");
 
 const jwt = require("jsonwebtoken");
 
+// to get login page
 const getLoginPage = asyncHandler(async (req,res,next)=>{
   res.render("login", {status: 200});
 });
 
+// to login the user
 const login = asyncHandler(async (req,res,next)=>{
   const {email, password} = req.body;
-  // console.log(password, email);
 
   const auth = getAuth();
 
   signInWithEmailAndPassword(auth, email, password)
   .then(cred=>{
-    // console.log("User logged in: ", cred.user);
-    // console.log(cred.user.uid);
     const accessToken = jwt.sign(
       {
           user: {
@@ -32,14 +31,12 @@ const login = asyncHandler(async (req,res,next)=>{
     );
     res.cookie('jwt_auth', accessToken);
     res.redirect('home');
-    // res.status(200).render('home');
   }).catch(error=>{
     const data = {
       status: 401,
       errorMessage: "User not found!",
-    }
-    
-    console.log(error.message);
+    };
+
     if(error.code == "auth/wrong-password"){
       data.errorMessage = "Wrong password!";
       res.status(401).render('login', data);
