@@ -5,7 +5,7 @@ const { getFirestore } = require("firebase/firestore");
 
 require("dotenv").config();
 
-
+// firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBdspfH2bpFPkiu4l3sctXo42JfzkrzYKE",
   authDomain: "blog-like-platform.firebaseapp.com",
@@ -16,15 +16,10 @@ const firebaseConfig = {
   measurementId: "G-TKBKEL5QCT"
 };
 
+// initializing firebase
 const app = initializeApp(firebaseConfig);
 
+// access to firestore
 const db = getFirestore(app);
 
-// console.log(db);
-// db.settings({timestampsInSnapshots: true});
-
-// const db = firebase.firestore();
-
 module.exports = {db};
-
-// const firebase = firebase.firebaseConfig(firebaseConfig);

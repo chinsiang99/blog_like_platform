@@ -3,7 +3,6 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const { expressErrorHandler } = require("./middleware/error_handlerMiddleware");
 const router = require('./routes/index');
-// const firebaseAuth = require('./config/dbConnection');
 const {db} = require('./config/dbConnection');
 const cookieParser = require('cookie-parser');
 const app = express();
@@ -24,14 +23,12 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 app.use("/", router);
 
-
-
 app.use(function(req, res, next) {
   res.status(404);
   throw new Error("Not found");
 });
 
+// error handler
 app.use(expressErrorHandler);
-// console.log("hello");
 
 app.listen(4000, ()=> console.log("HELLO PORT 4000"));
