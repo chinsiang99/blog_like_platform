@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+// to validate token
 const validateToken = asyncHandler(async (req, res, next) => {
     const jwtauth = req.cookies.jwt_auth;
     if (jwtauth) {
